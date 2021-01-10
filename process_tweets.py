@@ -50,14 +50,15 @@ def generate_date_columns(df):
     return df
 
 def drop_links_from_tweets(df):
-    for column, tweet in tweets.iterrows():
+    df['tweet_text'] = df['tweet_text'].apply(drop_link)
+    return df
 
-def drop_link(tweet):
-    
-
+def drop_link(tweet_text):
+    return re.sub(r"http\S+", "", tweet_text)
 
 def drop_empty_tweets(df):
-    pass
+    return df[df.tweet_text != '']
+    
 
 
 def main():
@@ -65,6 +66,8 @@ def main():
     tweet_df = generate_sentiment_score(tweet_df)
     tweet_df = generate_subjectivity_score(tweet_df)
     tweet_df = generate_date_columns(tweet_df)
+    tweet_df = drop_links_from_tweets(tweet_df)
+    tweet_df = drop_empty_tweets(tweet_df)
     write_csv(tweet_df, 'processed_tweets.csv')
 
     most_frequent_words = extract_n_most_frequent_words(tweet_df, 20)
