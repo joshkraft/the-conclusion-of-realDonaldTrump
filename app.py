@@ -51,7 +51,7 @@ st.subheader("A visualization of Trump's tweets between Election Day (11/03/2020
 @st.cache
 def load_data():
     data = pd.read_csv('data/processed_tweets.csv',
-    header=0)
+    header=0, index_col=0)
     return data    
 
 data_load_state = st.text('Loading data...')
@@ -67,3 +67,12 @@ st.write(sentiment_and_subjectivity_chart())
 
 st.title("Sentiment Timeline")
 st.write(sentiment_timeline_chart())
+
+st.title("Notes")
+st.write("Retweets, and tweets containing only links have been removed.")
+
+st.write(data[:5]['tweet_text'])
+
+st.write(len(data['tweet_text']))
+
+st.write(sum([len(tweet) for tweet in data['tweet_text']]))
