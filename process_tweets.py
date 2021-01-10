@@ -49,6 +49,16 @@ def generate_date_columns(df):
     df['created_date'] = df['created_at_est'].apply(lambda datetime: datetime.date())
     return df
 
+def drop_links_from_tweets(df):
+    for column, tweet in tweets.iterrows():
+
+def drop_link(tweet):
+    
+
+
+def drop_empty_tweets(df):
+    pass
+
 
 def main():
     tweet_df = load_raw_data('data/raw_tweets.csv')
