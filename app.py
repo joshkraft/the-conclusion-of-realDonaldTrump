@@ -3,8 +3,16 @@ import numpy as np
 import pandas as pd
 import altair as alt
 
+""" Data """
 
-""" Plot Definitions """
+@st.cache
+def load_data():
+    data = pd.read_csv('data/processed_tweets.csv',
+    header=0, index_col=0)
+    return data  
+
+
+""" Charts """
 
 def tweet_frequency_chart():
     frequency_chart = alt.Chart(data).mark_bar().encode(
@@ -43,16 +51,12 @@ def sentiment_timeline_chart():
 
 
 
+
 """ Page Rendering """
 
 st.title("The Conclusion of @realDonaldTrump")
 st.subheader("A visualization of Trump's tweets between Election Day (11/03/2020) and the permanent ban of @realDonaldTrump (1/8/2021).")
-
-@st.cache
-def load_data():
-    data = pd.read_csv('data/processed_tweets.csv',
-    header=0, index_col=0)
-    return data    
+  
 
 data_load_state = st.text('Loading data...')
 data = load_data()
@@ -70,9 +74,3 @@ st.write(sentiment_timeline_chart())
 
 st.title("Notes")
 st.write("Retweets, and tweets containing only links have been removed.")
-
-st.write(data[:5]['tweet_text'])
-
-st.write(len(data['tweet_text']))
-
-st.write(sum([len(tweet) for tweet in data['tweet_text']]))
