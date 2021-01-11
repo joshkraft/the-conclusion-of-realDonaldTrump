@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import altair as alt
+import json
 
 """ Data """
 
@@ -9,8 +10,13 @@ import altair as alt
 def load_data():
     data = pd.read_csv('data/processed_tweets.csv',
     header=0, index_col=0)
-    return data  
+    return data 
 
+def load_top_phrases():
+    with open('data/top_20_phrases.json', 'r') as f:
+        phrases = json.load(f)
+    
+    return pd.DataFrame({'count': phrases})
 
 """ Charts """
 
@@ -49,7 +55,11 @@ def sentiment_timeline_chart():
 
     return sentiment_timeline_chart
 
-
+def phrase_chart(data):
+    phrase_chart = alt.Chart(data).mark_point().encode(
+        x = 'count'
+    )
+    return phrase_chart
 
 
 """ Page Rendering """
@@ -66,11 +76,11 @@ st.write(data)
 st.title("Frequency of Tweets")
 st.write(tweet_frequency_chart())
 
-st.title("Sentiment vs Subjectivity")
-st.write(sentiment_and_subjectivity_chart())
-
-st.title("Sentiment Timeline")
-st.write(sentiment_timeline_chart())
 
 st.title("Notes")
 st.write("Retweets, and tweets containing only links have been removed.")
+
+st.title("App V2")
+phrases = load_top_phrases()
+st.write(phrases)
+st.write(phrase_chart(phrases))
