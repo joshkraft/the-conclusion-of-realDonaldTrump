@@ -80,33 +80,21 @@ def generate_top_terms_chart(data):
 
 
 def generate_top_terms_chart(data):
-    top_terms_chart = alt.Chart(data, width=200, height = 1000).mark_text().encode(
+    top_terms_chart = alt.Chart(data, width=700, height = 300).mark_text().encode(
         text = 'Term:N',
-        x = alt.X(
+        x = alt.X('Mentions:Q'),
+        y = alt.Y(
             'jitter:Q',
             title = None,
             axis = alt.Axis(values=[0], ticks = True, grid = False, labels = False)),
-        y = alt.Y('Mentions:Q'),
         color = alt.Color('Category:N'),
-        column = alt.Column(
-            'Category:N',
-            header = alt.Header(
-                labelAngle = 0,
-                titleOrient = 'top', 
-                labelOrient = 'bottom',
-                labelAlign = 'center',
-                labelPadding = 3
-            ),
-        ),
-        opacity = 'Mentions:Q'
+        #opacity = 'Mentions:Q',
+        size = 'Mentions:Q'
     ).transform_calculate(
         jitter='sqrt(-2*log(random()))*cos(2*PI*random())'
-    ).configure_facet(
-        spacing = 0
     ).configure_view(
         stroke = None
     )
-
 
     return top_terms_chart 
 
@@ -147,20 +135,6 @@ top_terms_df = generate_top_terms_df()
 st.write(generate_top_terms_chart(top_terms_df))
 
 
-
-
-
-
-"""
-
-I think its time to move on from streamlit to a jupyter notebook blog post.
-
-Make a single select plot, where you click a word and then see the data. Maybe put a bubble chart on the top, with a fixed df on bottom?
-
-
-
-"""
-
 def random_plot(data):
     chart = alt.Chart(data).mark_circle().encode(
         x = alt.X('Mentions:Q'),
@@ -173,3 +147,18 @@ def random_plot(data):
     return chart
 
 st.write(random_plot(top_terms_df))
+
+
+st.write(top_terms_df)
+
+search_phrase = st.text_input("Enter phrase")
+st.write(search_phrase)
+search_results = data[data['tweet_text'].str.lower().contains(search_phrase)]
+st.write(search_results)
+
+
+
+#data[data['tweet_text'].str.contains(search_phrase)]:
+#filtered_data = data[data[DATE_COLUMN].dt.hour == hour_to_filter]
+
+
